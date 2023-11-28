@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>G Major Visualizer</title>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5/lib/addons/p5.sound.min.js"></script>
+  <script>
+    let gMajorNotes = ['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5'];
+    let isNotePlaying = false;
+    let angle = 0;
+    let angleIncrement = 0.1;
+
+    function setup() {
+      createCanvas(400, 400);
+      mic = new p5.AudioIn();
+      mic.start();
+    }
+
+    function draw() {
+      background(isNotePlaying ? 255 : 0);
+
+      if (isNotePlaying) {
+        translate(width / 2, height / 2);
+        let radius = 100 + 50 * sin(angle);
+        fill(255, 255, 0);
+        ellipse(0, 0, radius * 2, radius * 2);
+        angle += angleIncrement;
+      }
+    }
+
+    function keyPressed() {
+      let noteName = getNoteName(keyCode);
+      if (gMajorNotes.includes(noteName)) {
+        isNotePlaying = true;
+      }
+    }
+
+    function keyReleased() {
+      isNotePlaying = false;
+    }
+
+    function getNoteName(keyCode) {
+      const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+      const noteIndex = (keyCode - 65) % 12; // Map key codes A to L to MIDI note indices
+      return noteNames[noteIndex];
+    }
+  </script>
+</body>
+</html>
