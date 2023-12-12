@@ -3,6 +3,11 @@
 #define LED_COUNT 8 //NeoPixel stick size
 int incomingByte;
 
+
+// 255,225,53 banana
+// 
+
+
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN); // NEOPIXEL setup for stick
 
 void setup() {
@@ -22,16 +27,29 @@ void loop() {
   if (Serial.available() > 0) {
     // read the incoming byte:
     incomingByte = Serial.read();
-    int r = 0;
+    int r = 255;
     int g = 255;
-    int b = 0;
+    int b = 255;
   
-    if (incomingByte == 'F' || incomingByte == 'A' || incomingByte == 'C') {
-      r = 0;
+    if (incomingByte == 'F') {
+      r = 76;
+      g = 153;
       b = 0;
 
+    }  else if (incomingByte == 'G')  {
+      r = 255;
+      g = 233;
+      b = 84;
+    }  else if (incomingByte == 'D')  {
+      r = 255;
+      g = 128;
+      b = 0;
+    }  else if (incomingByte == 'A')  {
+      r = 204;
+      g = 0;
+      b = 0;
     } else {
-      int colorValues[3] = {240, 100, 127};
+      int colorValues[3] = {255, 10, 127};
       r = colorValues[random(0,2)];
       b = colorValues[random(0,2)];
       g = colorValues[random(0,2)];
