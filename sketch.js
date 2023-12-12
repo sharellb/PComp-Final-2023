@@ -1,18 +1,8 @@
 let serial;
 let midi;
-let octave;
-let chordNoteIndex;
-let chordNotes = ["F", "A", "C"]; // MIDI note names for F major chord adjust if needed (We can also add more chords once this test works)
-
-
-//Create Synth
-const mainSynth = new Tone.PolySynth(3, Tone.FMSynth);
 
 function setup() {
   createCanvas(400, 400);
-
-  // Connect Synth
-  mainSynth.toMaster();
 
   // Setup MIDI
   WebMidi.enable(function (err) {
@@ -27,18 +17,19 @@ function setup() {
       if (midi) {
         console.log("Found MIDI input:", midi.name);
         midi.addListener('noteon', 'all',function (e) {
-            console.log("Note On:", e.note.name);
-            mainSynth.triggerAttackRelease(`${e.note.name}${e.note.octave}`, "4n");
+            let acc = e.note.accidental || "";
+            console.log("Note On:", `${e.note.name}${acc}${e.note.octave}`);
+;
             sendToArduino(e.note.name);
           }
         );
       }
     }
   });
-
+ 
   // Setup serial communication to Arduino
   serial = new p5.SerialPort();
-  serial.open('/dev/cu.usbmodem14101'); // Be sure to change to your Arduino port
+  serial.open('/dev/cu.usbmodem142201'); // Be sure to change to your Arduino port
   serial.on('connected', serverConnected);
   serial.on('list', gotList);
   serial.on('data', gotData);
@@ -99,11 +90,6 @@ function gotData() {
       // split the string on the commas:
       if (inString == "start") {
         console.log("here");
-        const seq = new Tone.Sequence((time, note) => {
-            mainSynth.triggerAttackRelease(note, 0.1, time);
-            // subdivisions are given as subarrays
-        }, ["F4", "A4", "C4", ["A4", "F5"], "C5", "A5", ["F4", "A4"], "C4", "A4"]).start(0);
-        Tone.Transport.start();
       }
 
     // send a byte back to prompt for more data:

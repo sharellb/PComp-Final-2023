@@ -31,9 +31,10 @@ void loop() {
       b = 0;
 
     } else {
-      r = random(100, 255);
-      b = random(100, 255);
-      g = random(0, 100);
+      int colorValues[3] = {240, 100, 127};
+      r = colorValues[random(0,2)];
+      b = colorValues[random(0,2)];
+      g = colorValues[random(0,2)];
     }
 
     for(int i=0; i<LED_COUNT; i++) { // For each pixel...
